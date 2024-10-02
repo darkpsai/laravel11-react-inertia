@@ -29,7 +29,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::resource('project', ProjectController::class);
     Route::resource('task', TaskController::class);
-    Route::resource('project', UserController::class);
+    Route::resource('user', UserController::class);
 });
 
 Route::middleware('auth')->group(function () {
