@@ -152,6 +152,24 @@ export default function Authenticated({ header, children }) {
             >
               Dashboard
             </ResponsiveNavLink>
+            <ResponsiveNavLink
+              href={route('project.index')}
+              active={route().current('project.index')}
+            >
+              Projects
+            </ResponsiveNavLink>
+            <ResponsiveNavLink
+              href={route('task.index')}
+              active={route().current('task.index')}
+            >
+              All Tasks
+            </ResponsiveNavLink>
+            <ResponsiveNavLink
+              href={route('user.index')}
+              active={route().current('user.index')}
+            >
+              Users
+            </ResponsiveNavLink>
           </div>
 
           <div className="border-t border-gray-200 pb-1 pt-4 dark:border-gray-600">
