@@ -3,6 +3,17 @@ import { PROJECT_STATUS_CLASS_MAP, PROJECT_STATUS_TEXT_MAP } from "@/constants";
 import Authenticated from "@/Layouts/AuthenticatedLayout";
 import { Head, Link } from "@inertiajs/react";
 
+const TABLE_LABEL_MAP = [
+  'ID',
+  'Image',
+  'Name',
+  'Status',
+  'Create Date',
+  'Due Date',
+  'Created By',
+  'Actions'
+];
+
 export default function Index({ projects }) {
   return (
     <Authenticated
@@ -22,14 +33,9 @@ export default function Index({ projects }) {
               <table className='w-full text-sm text-left rtl:text-right text-gray-600 dark:text-gray-400'>
                 <thead className='text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500'>
                   <tr className='text-nowrap'>
-                    <th className='px-3 py-3'>ID</th>
-                    <th className='px-3 py-3'>Image</th>
-                    <th className='px-3 py-3'>Name</th>
-                    <th className='px-3 py-3'>Status</th>
-                    <th className='px-3 py-3'>Create Date</th>
-                    <th className='px-3 py-3'>Due Date</th>
-                    <th className='px-3 py-3'>Created By</th>
-                    <th className='px-3 py-3'>Actions</th>
+                    {TABLE_LABEL_MAP.map((label, idx) => (
+                      <th className='px-3 py-3' key={idx}>{label}</th>
+                    ))}
                   </tr>
                 </thead>
                 <tbody>
@@ -56,7 +62,7 @@ export default function Index({ projects }) {
                   ))}
                 </tbody>
               </table>
-              <Pagination links={projects.meta.links} />
+              <Pagination params={projects}/>
             </div>
           </div>
         </div>
