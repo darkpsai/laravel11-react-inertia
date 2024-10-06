@@ -6,17 +6,19 @@ use App\Models\Project;
 use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
 use App\Http\Resources\ProjectResource;
+use Illuminate\Http\Request;
 
 class ProjectController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
+        $countPerPage = $request->input('per_page', 10);
         $query = Project::query();
 
-        $projects = $query->paginate(10)->onEachSide(1);
+        $projects = $query->paginate($countPerPage)->onEachSide(1);
 
         return inertia('Project/Index', [
             'projects' => ProjectResource::collection($projects),
