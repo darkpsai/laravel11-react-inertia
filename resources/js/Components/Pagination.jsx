@@ -1,12 +1,27 @@
+import { Label, Listbox, ListboxButton, ListboxOption } from "@headlessui/react";
 import { Link } from "@inertiajs/react";
+
+const perPageCount = [
+  {
+    id: 1, value: '10'
+  },
+  {
+    id: 2, value: '20'
+  },
+  {
+    id: 3, value: '30'
+  },
+  {
+    id: 4, value: '50'
+  },
+  {
+    id: 5, value: '100'
+  },
+]
 
 export default function Pagination({ params }) {
   return (
     <nav className='flex justify-center text-center mt-4'>
-      <div>
-        <label htmlFor="page-select">Items:</label>
-        <select name="page-select" id="page-select" value={perPage}></select>
-      </div>
       <div>
         {params.meta.links.map((link) => (
           <Link
