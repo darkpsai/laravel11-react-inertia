@@ -1,7 +1,8 @@
-import { Label, Listbox, ListboxButton, ListboxOption } from "@headlessui/react";
-import { Link } from "@inertiajs/react";
+import { useState } from 'react';
+import { Link, router } from "@inertiajs/react";
+import SelectInput from "./SelectInput";
 
-const perPageCount = [
+const itemsPerPage = [
   {
     id: 1, value: '10'
   },
@@ -19,10 +20,28 @@ const perPageCount = [
   },
 ]
 
-export default function Pagination({ params }) {
+export default function Pagination({ params, queryParams }) {
+  const [countPerPage, setCountPerPage] = useState(queryParams.per_page || 10);
+
+  const pageFieldChange = (e) => {
+    const newPerPage = e.target.value;
+    setCountPerPage(newPerPage);
+    router.get(route('project.index'), { per_page: newPerPage }, {preserveState: true});
+  }
+
   return (
-    <nav className='flex justify-center text-center mt-4'>
-      <div>
+    <nav className='w-full flex mt-4 relative'>
+      <div className='absolute right-0'>
+        <SelectInput
+          defaultValue={countPerPage}
+          onChange={pageFieldChange}
+        >
+          {itemsPerPage.map((item) => (
+            <option value={item.value} key={item.id}>{item.value} items per page</option>
+          ))}
+        </SelectInput>
+      </div>
+      <div className='w-full flex justify-center'>
         {params.meta.links.map((link) => (
           <Link
             href={link.url || ""}
