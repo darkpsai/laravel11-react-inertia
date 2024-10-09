@@ -15,13 +15,26 @@ class ProjectController extends Controller
      */
     public function index(Request $request)
     {
-        $countPerPage = $request->input('per_page', 10);
         $query = Project::query();
 
-        $projects = $query->paginate($countPerPage)->onEachSide(1);
+        $sortField = request('sort_field', 'created_at');
+        $sortDirection = request('sort_direction', 'desc');
+
+        if (request('name')) {
+            $query->where('name', 'like', '%' . request('name') . '%');
+        }
+
+        if (request('status')) {
+            $query->where('status', request('status'));
+        }
+
+        $itemsPerPage = $request->get('per_page', 10);
+
+        $projects = $query->orderBy($sortField, $sortDirection)->paginate($itemsPerPage)->onEachSide(1);
 
         return inertia('Project/Index', [
             'projects' => ProjectResource::collection($projects),
+            'queryParams' => request()->query() ?: null,
         ]);
     }
 
