@@ -26,13 +26,14 @@ export default function Pagination({ params, queryParams }) {
   const pageFieldChange = (e) => {
     const newPerPage = e.target.value;
     setCountPerPage(newPerPage);
-    router.get(route('project.index'), { per_page: newPerPage }, {preserveState: true});
+    router.get(route('project.index'), { per_page: newPerPage }, { preserveState: true });
   }
 
   return (
-    <nav className='w-full flex mt-4 relative'>
-      <div className='absolute right-0'>
+    <div className='w-full flex flex-row items-center justify-center mt-4'>
+      <div className='relative'>
         <SelectInput
+          className='text-gray-200 text-xs'
           defaultValue={countPerPage}
           onChange={pageFieldChange}
         >
@@ -41,16 +42,21 @@ export default function Pagination({ params, queryParams }) {
           ))}
         </SelectInput>
       </div>
-      <div className='w-full flex justify-center'>
-        {params.meta.links.map((link) => (
-          <Link
-            href={link.url || ""}
-            key={link.label}
-            className={'inline-block py-2 px-3 rounded-lg text-gray-200 text-xs ' + (link.active ? "bg-gray-950 " : " ") + (!link.url ? "!text-gray-500 cursor-not-allowed " : "hover:bg-gray-950")}
-            dangerouslySetInnerHTML={{ __html: link.label }}>
-          </Link>
-        ))}
+      <nav className='w-full flex relative'>
+        <div className='w-full flex'>
+          {params.meta.links.map((link) => (
+            <Link
+              href={link.url || ""}
+              key={link.label}
+              className={'inline-block py-2 px-3 rounded-lg text-gray-200 text-xs ' + (link.active ? "bg-gray-950 " : " ") + (!link.url ? "!text-gray-500 cursor-not-allowed " : "hover:bg-gray-950")}
+              dangerouslySetInnerHTML={{ __html: link.label }}>
+            </Link>
+          ))}
+        </div>
+      </nav>
+      <div className='px-3 text-nowrap text-gray-200 text-xs'>
+        <span>Total: {params.meta.total}</span>
       </div>
-    </nav>
+    </div>
   );
 }
