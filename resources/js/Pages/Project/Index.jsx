@@ -73,7 +73,7 @@ export default function Index({ projects, queryParams }) {
                 <thead className='text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500'>
                   <tr className='text-nowrap'>
                     {Object.entries(TABLE_LABEL_MAP).map(([key, label], idx) => (
-                      <th onClick={e => sortChanged(key)} className='px-3 py-3' key={idx}>{label}</th>
+                      <th onClick={e => sortChanged(key)} className={'px-3 py-3 '} key={idx}>{label}</th>
                     ))}
                   </tr>
                 </thead>
@@ -132,7 +132,6 @@ export default function Index({ projects, queryParams }) {
                   ))}
                 </tbody>
               </table>
-              {status}
               <div className='flex flex-row'>
                 <Pagination params={projects} queryParams={queryParams} />
               </div>
