@@ -30,7 +30,7 @@ export default function Pagination({ params, queryParams }) {
   }
 
   return (
-    <div className='w-full flex flex-row items-center justify-center mt-4'>
+    <div className='w-full flex flex-row items-center justify-center mt-4' role='pagination' aria-label='pagination'>
       <div className='relative'>
         <SelectInput
           className='text-gray-200 text-xs'
