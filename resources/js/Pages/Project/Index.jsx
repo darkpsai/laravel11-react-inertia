@@ -4,7 +4,7 @@ import TextInput from "@/Components/TextInput";
 import { PROJECT_STATUS_CLASS_MAP, PROJECT_STATUS_TEXT_MAP } from "@/constants";
 import Authenticated from "@/Layouts/AuthenticatedLayout";
 import { Head, Link, router } from "@inertiajs/react";
-import { useState } from 'react';
+import { ChevronUpIcon, ChevronDownIcon } from '@heroicons/react/16/solid';
 
 const TABLE_LABEL_MAP = {
   'id': 'ID',
@@ -17,8 +17,11 @@ const TABLE_LABEL_MAP = {
   'actions': 'Actions'
 };
 
-export default function Index({ projects, queryParams }) {
+const NON_SORTABLE_FIELDS = new Set(['image', 'actions', 'created_by']);
+
+export default function Index({ projects, queryParams = null }) {
   queryParams = queryParams || {};
+
   const searchFieldChange = (name, value) => {
     if (value) {
       queryParams[name] = value
@@ -36,22 +39,34 @@ export default function Index({ projects, queryParams }) {
   }
 
   const sortChanged = (name) => {
-    if (name === queryParams.sort_field) {
-      if (queryParams.sort_direction === 'asc') {
-        queryParams.sort_direction = 'desc';
-      } else {
-        queryParams.sort_direction = 'asc';
-      }
-    } else {
-      queryParams.sort_field = name;
-      queryParams.sort_direction = 'asc';
-    }
+    let debounceTimeouts = {}; // useRef to store timeout IDs
 
-    if (name === 'image' || name === 'actions' || name === 'created_by') {
+    // Do nothing if the field is non-sortable
+    if (NON_SORTABLE_FIELDS.has(name)) {
       return;
     }
 
-    router.get(route('project.index'), queryParams);
+    // Clear previous timeouts for the specific field
+    if (debounceTimeouts[name]) {
+      clearTimeout(debounceTimeouts[name]);
+    }
+
+    debounceTimeouts[name] = setTimeout(() => {
+      // Checked if the clicked column is the same as the current sorted field
+      const isSameField = name === queryParams.sort_field;
+
+      // Toggle sorting direction or reset to 'asc' if it's a new field
+      const sortDirection = isSameField ? queryParams.sort_direction === 'asc' ? 'desc' : 'asc' : 'asc';
+
+      // Create new queryParams to avoid mutation
+      const newQueryParams = {
+        ...queryParams, // Spread current queryParams
+        sort_field: isSameField ? queryParams.sort_field : name,
+        sort_direction: sortDirection,
+      }
+
+      router.get(route('project.index'), newQueryParams);
+    }, 300)
   }
 
   return (
@@ -73,7 +88,17 @@ export default function Index({ projects, queryParams }) {
                   <thead className='text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 border-b-2 border-gray-500'>
                     <tr className='text-nowrap'>
                       {Object.entries(TABLE_LABEL_MAP).map(([key, label], idx) => (
-                        <th onClick={e => sortChanged(key)} className={'px-3 py-3' + (key === 'name' ? ' w-[420px]' : '')} key={idx}>{label}</th>
+                        <th onClick={() => sortChanged(key)} key={idx} className={`${!NON_SORTABLE_FIELDS.has(key) ? 'cursor-pointer' : ''}`}>
+                          <div className={'flex items-center gap-1 px-3 py-3' + (key === 'name' ? ' w-[320px]' : '')}>
+                            {label}
+                            {!NON_SORTABLE_FIELDS.has(key) && (
+                              <div>
+                                <ChevronUpIcon className={"w-4 " + (queryParams.sort_field === key && queryParams.sort_direction === 'asc' ? 'text-white' : '')} />
+                                <ChevronDownIcon className={"w-4 -mt-2 " + (queryParams.sort_field === key && queryParams.sort_direction === 'desc' ? 'text-white' : '')} />
+                              </div>
+                            )}
+                          </div>
+                        </th>
                       ))}
                     </tr>
                   </thead>
