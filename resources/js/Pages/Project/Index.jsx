@@ -1,10 +1,10 @@
 import Pagination from "@/Components/Pagination";
 import SelectInput from "@/Components/SelectInput";
 import TextInput from "@/Components/TextInput";
-import { PROJECT_STATUS_CLASS_MAP, PROJECT_STATUS_TEXT_MAP } from "@/constants";
 import Authenticated from "@/Layouts/AuthenticatedLayout";
 import { Head, Link, router } from "@inertiajs/react";
 import { ChevronUpIcon, ChevronDownIcon } from '@heroicons/react/16/solid';
+import { PROJECT_STATUS_CLASS_MAP, PROJECT_STATUS_TEXT_MAP } from "@/constants";
 
 const TABLE_LABEL_MAP = {
   'id': 'ID',
@@ -23,11 +23,7 @@ export default function Index({ projects, queryParams = null }) {
   queryParams = queryParams || {};
 
   const searchFieldChange = (name, value) => {
-    if (value) {
-      queryParams[name] = value
-    } else {
-      delete queryParams[name]
-    }
+    value ? queryParams[name] = value : delete queryParams[name];
 
     router.get(route('project.index'), queryParams);
   }
