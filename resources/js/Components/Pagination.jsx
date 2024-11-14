@@ -26,7 +26,7 @@ export default function Pagination({ params, queryParams }) {
   const pageFieldChange = (e) => {
     const newPerPage = e.target.value;
     setCountPerPage(newPerPage);
-    router.get(route('project.index'), { per_page: newPerPage }, { preserveState: true });
+    // router.get(route('project.index'), { per_page: newPerPage }, { preserveState: true });
   }
 
   return (
