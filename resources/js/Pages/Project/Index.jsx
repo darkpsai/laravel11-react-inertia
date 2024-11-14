@@ -35,7 +35,7 @@ export default function Index({ projects, queryParams = null }) {
   }
 
   const sortChanged = (name) => {
-    let debounceTimeouts = {}; // useRef to store timeout IDs
+    let debounceTimeouts = {}; // store timeout IDs
 
     // Do nothing if the field is non-sortable
     if (NON_SORTABLE_FIELDS.has(name)) {
